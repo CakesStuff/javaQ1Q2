@@ -12,21 +12,36 @@ public class Ship {
 	private String destination;
 	private int crewMembers;
 	
-	// Das folgende Attribut dient nur zu Testzwecken
-	private Container testcontainer = new Container(26.3, 15.6);
-	
-	
 	public Ship(String name, double maxWeight, String destination) {
 		this.name = name;
 		this.maxWeight = maxWeight;
 		this.destination = destination;
 		loadedContainers = new Container[6];
-		testcontainer.setDestination("Hamburg");
-		testcontainer.setLoadedProduct("LEGO Sets");
 	}
-	
-	// TODO: automatisch getters und setters generieren lassen (Source -> Generate getters and setters)
-	// Alle getters generieren und überlegen, welche setters man braucht
+
+	public String getName() {
+		return name;
+	}
+
+	public double getMaxWeight() {
+		return maxWeight;
+	}
+
+	public Container[] getLoadedContainers() {
+		return loadedContainers;
+	}
+
+	public String getDestination() {
+		return destination;
+	}
+
+	public int getCrewMembers() {
+		return crewMembers;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
 	
 	public void hireCrewMembers(int number) {
 		if(number > 0)
@@ -64,10 +79,8 @@ public class Ship {
 	private boolean checkIfFits(Container newContainer) {
 		if(calculateCurrentWeight() + newContainer.getLoadedWeight() > maxWeight)
 			return false;
-		if(numberOfFirstEmptyPosition() < 0)
-			return false;
-		return true;
-	}
+        return numberOfFirstEmptyPosition() >= 0;
+    }
 	
 	public void load(Container newContainer) {
 		if(checkIfFits(newContainer))
