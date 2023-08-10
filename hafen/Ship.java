@@ -136,7 +136,6 @@ public class Ship {
 		sum = Double.POSITIVE_INFINITY;
 		List<Container> clist = Arrays.asList(loadedContainers);
 		generatePermutationsHelper(clist, 0);
-		System.out.println(sum);
 		System.arraycopy(balanceC, 0, loadedContainers, 0, loadedContainers.length);
 	}
 
@@ -181,5 +180,5 @@ public class Ship {
 		ship.balanceContainers();
 		new GUI(ship);
 	}
-	
+
 }
