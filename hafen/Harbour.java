@@ -5,9 +5,9 @@ import gui.GUI;
 
 
 public class Harbour {
-	private String country;
-	private String city;
-	private Ship[] shipsAtAnchor;
+	private final String country;
+	private final String city;
+	private final Ship[] shipsAtAnchor;
 	
 	
 	// das folgende Attribut ist nur zu Testzwecken vorhanden, es muss ansonsten nicht beachtet werden
@@ -25,22 +25,35 @@ public class Harbour {
 
 
 	public int countShipsInHarbour() {
-		// TODO
-		return -1;
+		int sum = 0;
+		for(Ship s : shipsAtAnchor)
+			if(s != null)
+				sum++;
+		return sum;
 	}
 	
 	public int giveFirstFreeAnchorage() {
-		// TODO
+		for(int i = 0; i < shipsAtAnchor.length; i++)
+			if(shipsAtAnchor[i] == null)
+				return i;
 		return -1;		
 	}
 	
 	public boolean leave(String leavingShipName) {
-		// TODO
+		for(int i = 0; i < shipsAtAnchor.length; i++)
+			if(shipsAtAnchor[i].getName().equals(leavingShipName)) {
+				shipsAtAnchor[i] = null;
+				return true;
+			}
 		return false;
 	}
 	
 	public boolean arrive(Ship arrivingShip) {
-		// TODO
+		for(int i = 0; i < shipsAtAnchor.length; i++)
+			if(shipsAtAnchor[i] == null) {
+				shipsAtAnchor[i] = arrivingShip;
+				return true;
+			}
 		return false;
 	}
 	

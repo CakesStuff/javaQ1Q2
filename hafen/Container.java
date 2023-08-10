@@ -17,13 +17,19 @@ public class Container {
 		
 	}
 	
-	// TODO: Methode zum kompletten Leeren des Containers
+	public void empty() {
+		loadedProduct = null;
+		currentWeight = 0;
+	}
 		
+	public boolean canFit(double weight) {
+		return weight + currentWeight <= maxWeight;
+	}
 	
-	// TODO: Hilfsmethode zum Überprüfen, ob eine gewünschte Zuladung noch passt 
-	
-	// TODO: Methode zum Zuladen einer bestimmten Menge
-	
+	public void loadProduct(double weight) {
+		if(canFit(weight))
+			currentWeight += weight;
+	}
 		
 	public double getMaxWeight() {
 		return maxWeight;

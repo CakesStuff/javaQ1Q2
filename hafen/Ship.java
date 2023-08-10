@@ -3,12 +3,13 @@ package hafen;
 import gui.GUI;
 
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Collections;
+import java.util.List;
 
 public class Ship {
-	private String name;
-	private double maxWeight;	
-	private Container[] loadedContainers;
+	private final String name;
+	private double maxWeight;
+	private final Container[] loadedContainers;
 	private String destination;
 	private int crewMembers;
 	
@@ -87,44 +88,63 @@ public class Ship {
 			loadedContainers[numberOfFirstEmptyPosition()] = newContainer;
 	}
 
-	private int numOfContainers() {
-		int num = 0;
-		for(Container c : loadedContainers)
-			if(c == null)
-				num++;
-		return num;
-	}
-
-	public void moveContainersOptimally() {
-		int num = numOfContainers();
-		Container[] temp = new Container[num];
-		for(Container c : loadedContainers)
-			if(c != null)
-				temp[--num] = c;
-		double average = 0;
-		for(Container c : temp)
-			average += c.getLoadedWeight();
-		average /= temp.length;
-		double finalAverage = average;
-		Arrays.sort(temp, Comparator.comparingDouble(o -> Math.abs(o.getLoadedWeight() - finalAverage)));
-        Arrays.fill(loadedContainers, null);
-		for(int i = 0; i < Math.floorDiv(temp.length, 2); i++) {
-			loadedContainers[i] = temp[i];
-			loadedContainers[loadedContainers.length - i - 1] = temp[temp.length - i - 1];
+	public double calculateBalance(List<Container> containers) {
+		double sum = 0;
+		for(int i = 0; i < Math.floorDiv(containers.size(), 2); i++) {
+			if(containers.get(i) == null)
+				continue;
+			double m = -i + Math.floorDiv(containers.size(), 2);
+			sum -= m * containers.get(i).getLoadedWeight();
 		}
-		if(temp.length % 2 == 1)
-			loadedContainers[Math.floorDiv(loadedContainers.length - 1, 2)] = temp[Math.floorDiv(temp.length, 2)];
+		for(int i = Math.floorDiv(containers.size(), 2); i < containers.size(); i++) {
+			if(containers.get(i) == null)
+				continue;
+			double m = i - Math.floorDiv(containers.size(), 2) + 1;
+			sum += m * containers.get(i).getLoadedWeight();
+		}
+		return Math.abs(sum);
 	}
-	
 
-	
-	
+	private Container[] balanceC;
+	private double sum;
 
-	@Override
+	private void generatePermutationsHelper(List<Container> classes, int currentIndex) {
+		if (currentIndex == classes.size() - 1) {
+			// Base case: Reached the last element, print the permutation
+			double b = calculateBalance(classes);
+			if(b < sum) {
+				sum = b;
+				balanceC = classes.toArray(new Container[0]);
+			}
+			return;
+		}
+
+		for (int i = currentIndex; i < classes.size(); i++) {
+			// Swap the current element with the element at the current index
+			Collections.swap(classes, currentIndex, i);
+
+			// Recursively generate permutations for the remaining elements
+			generatePermutationsHelper(classes, currentIndex + 1);
+
+			// Swap back to restore the original order
+			Collections.swap(classes, currentIndex, i);
+		}
+	}
+
+	public void balanceContainers() {
+		balanceC = new Container[loadedContainers.length];
+		sum = Double.POSITIVE_INFINITY;
+		List<Container> clist = Arrays.asList(loadedContainers);
+		generatePermutationsHelper(clist, 0);
+		System.out.println(sum);
+		System.arraycopy(balanceC, 0, loadedContainers, 0, loadedContainers.length);
+	}
+
+
+@Override
 	public String toString() {
 		return name + ", maxWeight " + maxWeight + "t, Crew "
-	// + numberOfCrewMembers
-				+ ", goes to " + destination;
+				+ crewMembers	+ ", goes to " + destination;
 	}
 		
 	/*
@@ -158,7 +178,7 @@ public class Ship {
 	public static void main(String[] args) {
 		Ship ship = new Ship("Floating Sibi", 111.2, "Lisbon");
 		ship.createExampleLoad();
-		ship.moveContainersOptimally();
+		ship.balanceContainers();
 		new GUI(ship);
 	}
 	
