@@ -1,13 +1,16 @@
 package hafen;
 
+import java.util.Objects;
 import java.util.Random;
 import gui.GUI;
+import linear.StackWithViewer;
 
 
 public class Harbour {
 	private final String country;
 	private final String city;
 	private final Ship[] shipsAtAnchor;
+	private final StackWithViewer<Container> cargoStack;
 	
 	
 	// das folgende Attribut ist nur zu Testzwecken vorhanden, es muss ansonsten nicht beachtet werden
@@ -19,10 +22,69 @@ public class Harbour {
 		this.city = city;
 		this.shipsAtAnchor = new Ship[size];
 		testship.load(new Container(15.5, 13.3));
-		testship.load(new Container(22.3, 0.2));		
+		testship.load(new Container(22.3, 0.2));
+		this.cargoStack = new StackWithViewer<>();
+		createCargoStack();
 	}
 	
+	public void createCargoStack() {
+		cargoStack.push(new Container(15, 0));
+		cargoStack.top().setDestination("Test");
+		cargoStack.push(new Container(10, 0));
+		cargoStack.top().setDestination("Test2");
+		cargoStack.push(new Container(20, 0));
+		cargoStack.top().setDestination("Test");
+		cargoStack.push(new Container(14, 0));
+		cargoStack.top().setDestination("Test2");
+	}
 
+	public double cargoWeight() {
+		StackWithViewer<Container> temp = new StackWithViewer<>();
+		double weight = 0;
+		while(!cargoStack.isEmpty()) {
+			Container c = cargoStack.top();
+			cargoStack.pop();
+			weight += c.getLoadedWeight();
+			temp.push(c);
+		}
+		while(!temp.isEmpty()) {
+			cargoStack.push(temp.top());
+			temp.pop();
+		}
+		return weight;
+	}
+
+	public boolean shipTop() {
+		Container c = cargoStack.top();
+		for(Ship s : shipsAtAnchor)
+			if(s != null && Objects.equals(s.getDestination(), c.getDestination()))
+				if(s.load(c)) {
+					cargoStack.pop();
+					return true;
+				}
+		return false;
+	}
+
+	public Container findContainer(String destination, double weightLimit) {
+		StackWithViewer<Container> temp = new StackWithViewer<>();
+		while(!cargoStack.isEmpty()) {
+			Container c = cargoStack.top();
+			cargoStack.pop();
+			if(Objects.equals(c.getDestination(), destination) && c.getLoadedWeight() <= weightLimit) {
+				while(!temp.isEmpty()) {
+					cargoStack.push(temp.top());
+					temp.pop();
+				}
+				return c;
+			}
+			temp.push(c);
+		}
+		while(!temp.isEmpty()) {
+			cargoStack.push(temp.top());
+			temp.pop();
+		}
+		return null;
+	}
 
 	public int countShipsInHarbour() {
 		int sum = 0;

@@ -66,7 +66,8 @@ public class Ship {
 	public double calculateCurrentWeight() {
 		double weight = 0;
 		for(Container c : loadedContainers)
-			weight += c.getLoadedWeight();
+			if(c != null)
+				weight += c.getLoadedWeight();
 		return weight;
 	}
 	
@@ -83,9 +84,12 @@ public class Ship {
         return numberOfFirstEmptyPosition() >= 0;
     }
 	
-	public void load(Container newContainer) {
-		if(checkIfFits(newContainer))
+	public boolean load(Container newContainer) {
+		if(checkIfFits(newContainer)) {
 			loadedContainers[numberOfFirstEmptyPosition()] = newContainer;
+			return true;
+		}
+		return false;
 	}
 
 	public double calculateBalance(List<Container> containers) {
