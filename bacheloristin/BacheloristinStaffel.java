@@ -1,6 +1,7 @@
 package bacheloristin;
 
 import gui.GUI;
+import linear.List;
 import linear.ListWithViewer;
 
 /**
@@ -26,26 +27,66 @@ public class BacheloristinStaffel {
 		initJungsListeTestkandidatBacheloristin(pJahr);
 	}
 
-	// TODO: Teil 2: Aufgabe a) rausschmeissen
-	
+	public void rausschmeissen(String pName) {
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(jungsListe.getContent().getName().equals(pName)) {
+				jungsListe.getContent().fliegtRaus();
+			}
+		}
+	}
 
-	// TODO: Teil 2: Aufgabe b) alleResetten
-	
+	public void alleResetten() {
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			jungsListe.getContent().resetQuotenPunkte();
+		}
+	}
 
-	// TODO: Teil 2: Aufgabe c) anzahlAusgeschiedener
-	
+	public int anzahlAusgeschiedener() {
+		int sum = 0;
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(!jungsListe.getContent().isNochDabei()) {
+				sum++;
+			}
+		}
+		return sum;
+	}
 
+	public void hatGelaestert(String pNameWer, String pNameUeberWen) {
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(jungsListe.getContent().getName().equals(pNameWer)) {
+				jungsListe.getContent().erhoeheQuotenPunkte(20);
+			} else if(jungsListe.getContent().getName().equals(pNameUeberWen)) {
+				jungsListe.getContent().erhoeheQuotenPunkte(10);
+			}
+		}
+	}
 
-	// TODO: Teil 2: Aufgabe d) hatGelaestert
-	
+	public void knutschtBacheloristin(Kandidat pKandidat) {
+		pKandidat.erhoeheQuotenPunkte(50);
+	}
 
-	// TODO: Teil 2: Aufgabe e) knutschtBacheloristin
-	
+	public Kandidat gibQuotenLetzten() {
+		Kandidat result = jungsListe.getContent();
+		int quote = Integer.MAX_VALUE;
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(jungsListe.getContent().getQuotenPunkte() < quote) {
+				result = jungsListe.getContent();
+				quote = result.getQuotenPunkte();
+			}
+		}
+		return result;
+	}
 
-	// TODO: Teil 2: Aufgabe f) gibQuotenLetzten
-	
-
-	// TODO: Teil 2: Aufgabe g) gibRentnerListe
+	public List<Kandidat> gibAlte() {
+		int alter = (jahr - 30) * 10000;
+		List<Kandidat> result = new List<>();
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(jungsListe.getContent().getGebDatum() < alter) {
+				result.append(jungsListe.getContent());
+			}
+		}
+		return result;
+	}
 
 	private void initJungsListeTestkandidatBacheloristin(int pJahr) {
         switch (pJahr) {
