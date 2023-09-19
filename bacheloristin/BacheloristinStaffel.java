@@ -88,6 +88,15 @@ public class BacheloristinStaffel {
 		return result;
 	}
 
+	public boolean kandidatExists(Kandidat kandidat) {
+		for(jungsListe.toFirst(); jungsListe.hasAccess(); jungsListe.next()) {
+			if(jungsListe.getContent().equals(kandidat)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	private void initJungsListeTestkandidatBacheloristin(int pJahr) {
         switch (pJahr) {
             case 2019 -> {
