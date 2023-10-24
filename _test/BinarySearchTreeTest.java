@@ -22,7 +22,7 @@ public class BinarySearchTreeTest {
 	
 	/**
 	 * fuegt die Celebrities aus der Liste in celebrityBaum ein
-	 * @param pCelebrityListe
+	 * @param pList
 	 */
 	private void einfuegenListe(List<Celebrity> pList){
 		System.out.println("einfuegenListe(pList)");

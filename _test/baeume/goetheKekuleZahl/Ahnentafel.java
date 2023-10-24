@@ -26,7 +26,7 @@ public class Ahnentafel {
 		BinaryTree<Individuum> tceBaum = new BinaryTree<Individuum>(tce);
 		ahnenBaum.setRightTree(tceBaum);
 
-		Individuum gfg = new Individuum("Göthe", "Friedrich Georg", 1657);
+		Individuum gfg = new Individuum("Gï¿½the", "Friedrich Georg", 1657);
 		BinaryTree<Individuum> gfgBaum = new BinaryTree<Individuum>(gfg);
 		gjcBaum.setLeftTree(gfgBaum);
 
@@ -63,16 +63,16 @@ public class Ahnentafel {
 
 	public Individuum gibIndividuum(int pKekule) {
 		if (pKekule > 0) {
-			Stack<Boolean> pfadZumIndividuum = new Stack<Boolean>();
+			Stack<Boolean> pfadZumIndividuum = new Stack<>();
 			int tempKekule = pKekule;
 			while (tempKekule > 1) {
-				pfadZumIndividuum.push(new Boolean(tempKekule % 2 == 0));
+				pfadZumIndividuum.push(tempKekule % 2 == 0);
 				tempKekule = tempKekule / 2;
 			}
 			BinaryTree<Individuum> aktTeilbaum = gibAhnenbaum();
 			while (!pfadZumIndividuum.isEmpty() &&
 					!aktTeilbaum.isEmpty()) {
-				if (((Boolean) pfadZumIndividuum.top()).booleanValue()) {
+				if (pfadZumIndividuum.top()) {
 					aktTeilbaum = aktTeilbaum.getLeftTree();
 				} else {
 					aktTeilbaum = aktTeilbaum.getRightTree();
