@@ -16,10 +16,41 @@ public class QuicksortTest {
 		anzahlVergleiche = 0;
 	}
 
-	public List<String> quicksort(List<String> pStrings){
-		List<String> ergebnis = new ListWithViewer<String>();
-		//TODO
-		return ergebnis;		
+	public List<String> quicksort(List<String> strings){
+		int length = 0;
+		for(strings.toFirst(); strings.hasAccess(); strings.next()) {
+			length++;
+		}
+		if(length < 2) {
+			return strings;
+		}
+		strings.toFirst();
+		String pivot = strings.getContent();
+
+		List<String> left = new List<>();
+		List<String> right = new List<>();
+
+		for(strings.next(); strings.hasAccess(); strings.next()) {
+			if(strings.getContent().toCharArray()[0] < pivot.toCharArray()[0]) {
+				left.append(strings.getContent());
+			} else {
+				right.append(strings.getContent());
+			}
+		}
+
+		left = quicksort(left);
+		right = quicksort(right);
+
+		List<String> result = new List<>();
+
+		for(left.toFirst(); left.hasAccess(); left.next()) {
+			result.append(left.getContent());
+		}
+		result.append(pivot);
+		for(right.toFirst(); right.hasAccess(); right.next()) {
+			result.append(right.getContent());
+		}
+		return result;
 	}
 
 	public void quicksortTestKlein(){
