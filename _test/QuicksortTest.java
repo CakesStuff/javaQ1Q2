@@ -9,7 +9,6 @@ import linear.List;
 import linear.ListWithViewer;
 
 public class QuicksortTest {
-	private List<String> avengers;
 	private int anzahlVergleiche;
 
 	public QuicksortTest(){
@@ -31,7 +30,8 @@ public class QuicksortTest {
 		List<String> right = new List<>();
 
 		for(strings.next(); strings.hasAccess(); strings.next()) {
-			if(strings.getContent().toCharArray()[0] < pivot.toCharArray()[0]) {
+			anzahlVergleiche++;
+			if(strings.getContent().compareTo(pivot) < 0) {
 				left.append(strings.getContent());
 			} else {
 				right.append(strings.getContent());
@@ -55,13 +55,14 @@ public class QuicksortTest {
 
 	public void quicksortTestKlein(){
 		anzahlVergleiche = 0;
-		avengers = new ListWithViewer<String>();
+		List<String> avengers = new ListWithViewer<>();
 		avengers.append("Iron Man");
 		avengers.append("Captain America");
 		avengers.append("Thor");
 		avengers.append("Spider Man");
 		avengers.append("Black Widow");
 		List<String> ergebnis = quicksort(avengers);
+		ausgeben(ergebnis);
 	}
 
 	public void quicksortTestGross(int pAnzahl){
@@ -70,7 +71,7 @@ public class QuicksortTest {
 		long startzeit = System.currentTimeMillis();
 		List<String> ergebnis = quicksort(strings);
 		long endzeit = System.currentTimeMillis();
-		ausgeben(ergebnis);
+		//ausgeben(ergebnis);
 		long verbrauchteZeit = endzeit - startzeit; 
 		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
 		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
@@ -78,10 +79,10 @@ public class QuicksortTest {
 
 	/**
 	 * erzeugt eine List mit zufaelligen Strings der Laenge 10.
-	 * @param pAnzahl
+	 * @param pAnzahl anzahl an strings
 	 */
 	public List<String> erzeugen(int pAnzahl){
-		List<String> ergebnis = new List<String>();
+		List<String> ergebnis = new List<>();
 		Random r = new Random();
 		System.out.println("*** erzeugen("+pAnzahl+") ***");
 		for(int n=0; n<pAnzahl; n++){
@@ -91,7 +92,7 @@ public class QuicksortTest {
 				s += (char)(r.nextInt(26) + 65);
 			}
 			ergebnis.append(s);
-			System.out.println(s);
+			//System.out.println(s);
 		}
 		return ergebnis;
 	}
