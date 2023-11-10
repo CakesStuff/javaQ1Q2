@@ -9,7 +9,7 @@ import java.util.Random;
 
 import linear.List;
 import linear.ListWithViewer;
-import sortieren.QuicksortMulitThread;
+import sortieren.QuicksortMultiThread;
 
 public class QuicksortTest {
 	private int anzahlVergleiche;
@@ -127,7 +127,7 @@ public class QuicksortTest {
 		anzahlVergleiche = 0;
 		stringsArr = erzeugenArray(pAnzahl);
 		startzeit = System.currentTimeMillis();
-		ergebnisArr = new QuicksortMulitThread().quicksortArr(stringsArr);
+		ergebnisArr = new QuicksortMultiThread().quicksortArr(stringsArr);
 		endzeit = System.currentTimeMillis();
 		//ausgebenArr(ergebnisArr);
 		verbrauchteZeit = endzeit - startzeit;

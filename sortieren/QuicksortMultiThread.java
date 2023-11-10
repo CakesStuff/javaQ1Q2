@@ -2,7 +2,7 @@ package sortieren;
 
 import java.util.concurrent.CountDownLatch;
 
-public class QuicksortMulitThread {
+public class QuicksortMultiThread {
     public String[] quicksortArr(String[] strings) {
         CountDownLatch c = new CountDownLatch(1);
         new QuicksortThread(strings, 0, strings.length, c).start();
