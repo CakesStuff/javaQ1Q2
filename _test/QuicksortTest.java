@@ -3,10 +3,13 @@ package _test;
 
 import gui.GUI;
 
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 
 import linear.List;
 import linear.ListWithViewer;
+import sortieren.QuicksortMulitThread;
 
 public class QuicksortTest {
 	private int anzahlVergleiche;
@@ -53,6 +56,38 @@ public class QuicksortTest {
 		return result;
 	}
 
+	public String[] quicksortArr(String[] strings) {
+		return quicksortArrRec(strings, 0, strings.length);
+	}
+
+	private String[] quicksortArrRec(String[] strings, int l, int r) {
+		if((r-l) < 2) return strings;
+
+		String pivot = strings[l];
+
+		String[] parts = new String[r - l];
+		int li = 0;
+		int ri = r - l;
+
+		for(int i = l + 1; i < r; i++) {
+			anzahlVergleiche++;
+			if(strings[i].compareTo(pivot) < 0) {
+				parts[li++] = strings[i];
+			} else {
+				parts[--ri] = strings[i];
+			}
+		}
+
+		quicksortArrRec(parts, 0, li);
+		quicksortArrRec(parts, ri, r - l);
+
+        System.arraycopy(parts, 0, strings, l, li);
+		strings[li + l] = pivot;
+        System.arraycopy(parts, ri, strings, ri + l, r - l - ri);
+
+		return strings;
+	}
+
 	public void quicksortTestKlein(){
 		anzahlVergleiche = 0;
 		List<String> avengers = new ListWithViewer<>();
@@ -66,6 +101,7 @@ public class QuicksortTest {
 	}
 
 	public void quicksortTestGross(int pAnzahl){
+		System.out.println("List performance:");
 		anzahlVergleiche = 0;
 		List<String>strings = erzeugen(pAnzahl);
 		long startzeit = System.currentTimeMillis();
@@ -73,6 +109,39 @@ public class QuicksortTest {
 		long endzeit = System.currentTimeMillis();
 		//ausgeben(ergebnis);
 		long verbrauchteZeit = endzeit - startzeit; 
+		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
+		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
+
+		System.out.println("Array performance:");
+		anzahlVergleiche = 0;
+		String[] stringsArr = erzeugenArray(pAnzahl);
+		startzeit = System.currentTimeMillis();
+		String[] ergebnisArr = quicksortArr(stringsArr);
+		endzeit = System.currentTimeMillis();
+		//ausgebenArr(ergebnisArr);
+		verbrauchteZeit = endzeit - startzeit;
+		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
+		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
+
+		System.out.println("Multi thread performance:");
+		anzahlVergleiche = 0;
+		stringsArr = erzeugenArray(pAnzahl);
+		startzeit = System.currentTimeMillis();
+		ergebnisArr = new QuicksortMulitThread().quicksortArr(stringsArr);
+		endzeit = System.currentTimeMillis();
+		//ausgebenArr(ergebnisArr);
+		verbrauchteZeit = endzeit - startzeit;
+		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
+		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
+
+		System.out.println("Java performance:");
+		anzahlVergleiche = 0;
+		stringsArr = erzeugenArray(pAnzahl);
+		startzeit = System.currentTimeMillis();
+		Arrays.sort(stringsArr, Comparator.naturalOrder());
+		endzeit = System.currentTimeMillis();
+		//ausgebenArr(ergebnisArr);
+		verbrauchteZeit = endzeit - startzeit;
 		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
 		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
 	}
@@ -97,6 +166,22 @@ public class QuicksortTest {
 		return ergebnis;
 	}
 
+	public String[] erzeugenArray(int anzahl) {
+		String[] ergebnis = new String[anzahl];
+		Random r = new Random();
+		int a = 0;
+		System.out.println("*** erzeugenArr("+anzahl+") ***");
+		for(int n=0; n<anzahl; n++){
+			String s = "";
+			for (int i=0; i<10;i++)
+			{
+				s += (char)(r.nextInt(26) + 65);
+			}
+			ergebnis[a++] = s;
+		}
+		return ergebnis;
+	}
+
 	public void ausgeben(List<String> pStrings){
 		System.out.println();
 		System.out.println("*** ausgeben() ***");
@@ -105,7 +190,19 @@ public class QuicksortTest {
 		}
 	}
 
+	public void ausgebenArr(String[] pStrings){
+		System.out.println();
+		System.out.println("*** ausgeben() ***");
+		for(int i = 0;i < pStrings.length; i++){
+			System.out.println(pStrings[i]);
+		}
+	}
+
 	public static void main(String[] args) {
 		new GUI(new QuicksortTest());
+	}
+
+	public int fakultaet(int n) {
+		return n <= 1 ? n : n * fakultaet(n-1);
 	}
 }
