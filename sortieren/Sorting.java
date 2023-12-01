@@ -3,6 +3,8 @@ package sortieren;
 import gui.GUI;
 import linear.List;
 
+import java.util.Arrays;
+
 public class Sorting {
     public List<String> quicksort(List<String> strings) {
         int length = 0;
@@ -39,6 +41,14 @@ public class Sorting {
             result.append(right.getContent());
         }
         return result;
+    }
+
+    public void mergesort(String[] arr) {
+        mergesortRec(arr, 0, arr.length);
+    }
+
+    public void mergesortRec(String[] arr, int l, int r) {
+        //TODO
     }
 
     public static void main(String[] args) {
