@@ -54,6 +54,11 @@ public class BinaryTreeTest {
 		return pTree.getContent() + summe(pTree.getLeftTree()) + summe(pTree.getRightTree());
 	}
 
+    public int gibTiefe(BinaryTree pBaum) {
+        if(pBaum == null || pBaum.isEmpty())return 0;
+        return (((pBaum.getLeftTree() != null && !pBaum.getLeftTree().isEmpty()) || (pBaum.getRightTree() != null && !pBaum.getRightTree().isEmpty())) ? 1 : 0) + Math.max(gibTiefe(pBaum.getLeftTree()), gibTiefe(pBaum.getRightTree()));
+    }
+
 	public static void main(String[] args) {
 		new GUI(new BinaryTreeTest());
 	}
