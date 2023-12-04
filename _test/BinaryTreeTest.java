@@ -2,6 +2,8 @@ package _test;
 import gui.GUI;
 import baeume.BinaryTree;
 import baeume.TreeViewer;
+import linear.List;
+import linear.ListWithViewer;
 
 
 public class BinaryTreeTest {
@@ -54,9 +56,18 @@ public class BinaryTreeTest {
 		return pTree.getContent() + summe(pTree.getLeftTree()) + summe(pTree.getRightTree());
 	}
 
-    public int gibTiefe(BinaryTree pBaum) {
+    public <ContentType> int gibTiefe(BinaryTree<ContentType> pBaum) {
         if(pBaum == null || pBaum.isEmpty())return 0;
         return (((pBaum.getLeftTree() != null && !pBaum.getLeftTree().isEmpty()) || (pBaum.getRightTree() != null && !pBaum.getRightTree().isEmpty())) ? 1 : 0) + Math.max(gibTiefe(pBaum.getLeftTree()), gibTiefe(pBaum.getRightTree()));
+    }
+
+    public <ContentType> List<ContentType> gibPreorderListe(BinaryTree<ContentType> pBaum) {
+        if(pBaum == null || pBaum.isEmpty())return new List<>();
+        List<ContentType> result = new List<>();
+        result.append(pBaum.getContent());
+        result.concat(gibPreorderListe(pBaum.getLeftTree()));
+        result.concat(gibPreorderListe(pBaum.getRightTree()));
+        return result;
     }
 
 	public static void main(String[] args) {
