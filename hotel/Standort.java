@@ -4,7 +4,7 @@ import baeume.ComparableContent;
 
 import java.util.ArrayList;
 
-public class Standort implements ComparableContent {
+public class Standort implements ComparableContent<Standort> {
     private String name;
     private String land;
     private ArrayList<Hotel> hotels;
@@ -37,18 +37,26 @@ public class Standort implements ComparableContent {
         hotels.remove(hotel);
     }
 
-    @Override
-    public boolean isGreater(Object pContent) {
-        return false;
+    private double getScore() {
+        double sum = 0;
+        for (Hotel hotel : hotels) {
+            sum += hotel.getBewertungszahl();
+        }
+        return sum / hotels.size();
     }
 
     @Override
-    public boolean isEqual(Object pContent) {
-        return false;
+    public boolean isGreater(Standort pContent) {
+        return pContent.getScore() > getScore();
     }
 
     @Override
-    public boolean isLess(Object pContent) {
-        return false;
+    public boolean isEqual(Standort pContent) {
+        return pContent.getScore() == getScore();
+    }
+
+    @Override
+    public boolean isLess(Standort pContent) {
+        return pContent.getScore() < getScore();
     }
 }

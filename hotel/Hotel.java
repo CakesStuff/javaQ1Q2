@@ -35,12 +35,13 @@ public class Hotel {
         return hotelkette;
     }
 
-    public int getBewertungszahl() {
-        return bewertungszahl;
+    public double getBewertungszahl() {
+        return (double) bewertungszahl / anzahlBewertungen;
     }
 
     public void bewerte(int bewertungszahl) {
-        this.bewertungszahl = bewertungszahl; //?????
+        this.anzahlBewertungen++;
+        this.bewertungszahl += bewertungszahl;
     }
 
     @Override
